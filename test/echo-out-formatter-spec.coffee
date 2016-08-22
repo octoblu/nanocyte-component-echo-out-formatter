@@ -28,6 +28,31 @@ describe 'EchoOutFormatter', ->
           json:
             responseText: 'hello'
 
+    describe 'when called with a url and a response object', ->
+      beforeEach ->
+        config =
+          url: 'something.octoblu.com'
+          response:
+            outputSpeech:
+              type: 'SSML'
+              ssml: '<speak>hello</speak>'
+
+        @result = @sut.onEnvelope({config})
+
+      it 'should return the message', ->
+        expect(@result).to.deep.equal
+          headers:
+            'User-Agent': 'Octoblu'
+          uri: 'something.octoblu.com'
+          method: 'POST'
+          followAllRedirects: true
+          qs: {}
+          json:
+            response:
+              outputSpeech:
+                type: 'SSML'
+                ssml: '<speak>hello</speak>'
+
     describe 'when called with a url and without a responseText', ->
       beforeEach ->
         config =

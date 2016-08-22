@@ -2,7 +2,7 @@ ReturnValue = require 'nanocyte-component-return-value'
 
 class EchoOutFormatter extends ReturnValue
   onEnvelope: ({config}) =>
-    {url,responseText} = config
+    {url,responseText,response} = config
     params =
       headers:
         'User-Agent': 'Octoblu'
@@ -12,6 +12,7 @@ class EchoOutFormatter extends ReturnValue
       qs: {}
       json: true
     params.json = {responseText} if responseText?
+    params.json = {response} if response?
     return params
 
 module.exports = EchoOutFormatter
