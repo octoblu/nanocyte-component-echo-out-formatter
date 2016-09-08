@@ -28,10 +28,11 @@ describe 'EchoOutFormatter', ->
           json:
             responseText: 'hello'
 
-    describe 'when called with a url and a response object', ->
+    describe 'when called with a url and a response object with enable true', ->
       beforeEach ->
         config =
           url: 'something.octoblu.com'
+          enable: true
           response:
             outputSpeech:
               type: 'SSML'
@@ -52,6 +53,26 @@ describe 'EchoOutFormatter', ->
               outputSpeech:
                 type: 'SSML'
                 ssml: '<speak>hello</speak>'
+
+    describe 'when called with a url and a responseText and enable equal false', ->
+      beforeEach ->
+        config =
+          url: 'something.octoblu.com'
+          enable: false
+          responseText: "hello!"
+
+        @result = @sut.onEnvelope({config})
+
+      it 'should return the message', ->
+        expect(@result).to.deep.equal
+          headers:
+            'User-Agent': 'Octoblu'
+          uri: 'something.octoblu.com'
+          method: 'POST'
+          followAllRedirects: true
+          qs: {}
+          json:
+            responseText: "hello!"
 
     describe 'when called with a url and without a responseText', ->
       beforeEach ->
